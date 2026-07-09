@@ -6,22 +6,11 @@ import logging
 import os
 import dagshub
 
-# Set up DagsHub credentials for MLflow tracking
-"""dagshub_token = os.getenv("DAGSHUB_PAT")
-if not dagshub_token:
-    raise EnvironmentError("DAGSHUB_PAT environment variable is not set")
 
-os.environ["MLFLOW_TRACKING_USERNAME"] = dagshub_token
-os.environ["MLFLOW_TRACKING_PASSWORD"] = dagshub_token
 
-dagshub_url = "https://dagshub.com"
-repo_owner = "Sovith"
-repo_name = "mlops-mini-project" 
-
-# Set up MLflow tracking URI
-mlflow.set_tracking_uri(f'{dagshub_url}/{repo_owner}/{repo_name}.mlflow')"""
 
 dagshub.init(repo_owner='Sovith07', repo_name='mlflow-mini-project', mlflow=True)
+mlflow.set_tracking_uri('https://dagshub.com/Sovith07/mlflow-mini-project.mlflow')
 
 # logging configuration
 logger = logging.getLogger('model_registration')
@@ -57,7 +46,7 @@ def load_model_info(file_path: str) -> dict:
 def register_model(model_name: str, model_info: dict):
     """Register the model to the MLflow Model Registry."""
     try:
-        model_uri = f"runs:/{model_info['run_id']}/{model_info['model_path']}"
+        model_uri = model_info['model_uri']
         
         # Register the model
         model_version = mlflow.register_model(model_uri, model_name)
@@ -80,7 +69,7 @@ def main():
         model_info_path = 'reports/experiment_info.json'
         model_info = load_model_info(model_info_path)
         
-        model_name = "my_model"
+        model_name = "my_model1"
         register_model(model_name, model_info)
     except Exception as e:
         logger.error('Failed to complete the model registration process: %s', e)

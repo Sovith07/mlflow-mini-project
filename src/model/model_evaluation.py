@@ -10,7 +10,9 @@ import mlflow
 import mlflow.sklearn
 import dagshub
 import os
+from dotenv import load_dotenv
 
+load_dotenv()
 # without ci/cd pipeline
 #dagshub.init(repo_owner='Sovith07', repo_name='mlflow-mini-project', mlflow=True)
 #mlflow.set_tracking_uri('https://dagshub.com/Sovith07/mlflow-mini-project.mlflow')

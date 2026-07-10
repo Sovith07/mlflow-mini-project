@@ -69,6 +69,10 @@ def normalize_text(text):
 
 #with ci/cd
 # Set up DagsHub credentials for MLflow tracking
+from dotenv import load_dotenv
+
+load_dotenv()
+
 dagshub_token = os.getenv("DAGSHUB_PAT")
 if not dagshub_token:
     raise EnvironmentError("DAGSHUB_PAT environment variable is not set")
@@ -78,7 +82,7 @@ os.environ["MLFLOW_TRACKING_PASSWORD"] = dagshub_token
 
 dagshub_url = "https://dagshub.com"
 repo_owner = "Sovith07"
-repo_name = "mlops-mini-project"
+repo_name = "mlflow-mini-project"
 
 # Set up MLflow tracking URI
 mlflow.set_tracking_uri(f'{dagshub_url}/{repo_owner}/{repo_name}.mlflow')

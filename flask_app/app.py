@@ -97,7 +97,7 @@ def get_latest_model_version(model_name):
         latest_version = client.get_latest_versions(model_name, stages=["Staging"])
     return latest_version[0].version if latest_version else None
 
-model_name = "my_model1"
+model_name = "my_model"
 model_version = get_latest_model_version(model_name)
 
 model_uri = f'models:/{model_name}/{model_version}'

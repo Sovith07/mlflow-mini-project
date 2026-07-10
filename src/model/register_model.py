@@ -9,8 +9,8 @@ import dagshub
 
 
 # without ci/cd pipeline
-dagshub.init(repo_owner='Sovith07', repo_name='mlflow-mini-project', mlflow=True)
-mlflow.set_tracking_uri('https://dagshub.com/Sovith07/mlflow-mini-project.mlflow')
+#dagshub.init(repo_owner='Sovith07', repo_name='mlflow-mini-project', mlflow=True)
+#mlflow.set_tracking_uri('https://dagshub.com/Sovith07/mlflow-mini-project.mlflow')
 
 # with ci/cd pipeline
 # Set up DagsHub credentials for MLflow tracking

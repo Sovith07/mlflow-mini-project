@@ -67,7 +67,7 @@ def normalize_text(text):
 
     return text
 
-"""
+#with ci/cd
 # Set up DagsHub credentials for MLflow tracking
 dagshub_token = os.getenv("DAGSHUB_PAT")
 if not dagshub_token:
@@ -77,14 +77,16 @@ os.environ["MLFLOW_TRACKING_USERNAME"] = dagshub_token
 os.environ["MLFLOW_TRACKING_PASSWORD"] = dagshub_token
 
 dagshub_url = "https://dagshub.com"
-repo_owner = "campusx-official"
+repo_owner = "Sovith07"
 repo_name = "mlops-mini-project"
 
 # Set up MLflow tracking URI
-mlflow.set_tracking_uri(f'{dagshub_url}/{repo_owner}/{repo_name}.mlflow')"""
+mlflow.set_tracking_uri(f'{dagshub_url}/{repo_owner}/{repo_name}.mlflow')
 
-dagshub.init(repo_owner='Sovith07', repo_name='mlflow-mini-project', mlflow=True)
-mlflow.set_tracking_uri('https://dagshub.com/Sovith07/mlflow-mini-project.mlflow')
+# without ci/cd
+#dagshub.init(repo_owner='Sovith07', repo_name='mlflow-mini-project', mlflow=True)
+#mlflow.set_tracking_uri('https://dagshub.com/Sovith07/mlflow-mini-project.mlflow')
+
 app = Flask(__name__)
 
 # load model from model registry

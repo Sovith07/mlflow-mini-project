@@ -78,6 +78,7 @@ jobs:
          docker stop emotion-app || true
          docker rm emotion-app || true
 
-         docker run -p 80:5000 --name emotion-app \
+         docker run -d --name emotion-app \
+         -p 80:5000 \
          -e DAGSHUB_PAT=${{ secrets.DAGSHUB_PAT }} \
          ${{ secrets.DOCKER_HUB_USERNAME }}/emotion1:v3

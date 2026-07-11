@@ -1,0 +1,9 @@
+dagshub
+Flask
+mlflow
+mlflow_skinny
+mlflow_tracing
+nltk
+numpy
+pandas
+python-dotenv

@@ -1,6 +1,6 @@
 # load test + signature test + performance test
 
-import unittest
+import unittest  # python built in test framework
 import mlflow
 import os
 import pandas as pd
@@ -9,7 +9,7 @@ import pickle
 
 class TestModelLoading(unittest.TestCase):
 
-    @classmethod
+    @classmethod  # passes the class
     def setUpClass(cls):
         # Set up DagsHub credentials for MLflow tracking
         dagshub_token = os.getenv("DAGSHUB_PAT")
@@ -38,11 +38,13 @@ class TestModelLoading(unittest.TestCase):
         # Load holdout test data
         cls.holdout_data = pd.read_csv('data/processed/test_bow.csv')
 
-    @staticmethod
+        #Class methods are used for behavior or data shared by all instances since the model,holdout data and vectorizer are loaded once and used again in every test so we call them in cls 
+
+    @staticmethod  # doesn't need self and doesn't need cls
     def get_latest_model_version(model_name, stage="Staging"):
-        client = mlflow.MlflowClient()
+        client = mlflow.MlflowClient()  # Creates connection to Model Registry
         latest_version = client.get_latest_versions(model_name, stages=[stage])
-        return latest_version[0].version if latest_version else None
+        return latest_version[0].version if latest_version else None   # latest_version is actually a list
 
     def test_model_loaded_properly(self):
         self.assertIsNotNone(self.new_model)

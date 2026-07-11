@@ -5,12 +5,12 @@ class FlaskAppTests(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.client = app.test_client()
+        cls.client = app.test_client() # This creates Flask's test client. Think of it as a fake browser
 
     def test_home_page(self):
-        response = self.client.get('/')
+        response = self.client.get('/')  # Exactly like typing http://localhost:5000/
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'<title>Sentiment Analysis</title>', response.data)
+        self.assertIn(b'<title>Sentiment Analysis</title>', response.data)  # response.data Contains the whole HTML page.
 
     def test_predict_page(self):
         response = self.client.post('/predict', data=dict(text="I love this!"))

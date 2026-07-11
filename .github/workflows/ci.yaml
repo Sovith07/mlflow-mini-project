@@ -79,6 +79,5 @@ jobs:
          docker rm emotion-app || true
 
          docker run -p 80:5000 --name emotion-app \
-        
          -e DAGSHUB_PAT=${{ secrets.DAGSHUB_PAT }} \
-         ${{ secrets.DOCKER_USERNAME }}/emotion1:v2 
+         ${{ secrets.DOCKER_USERNAME }}/emotion1:v3

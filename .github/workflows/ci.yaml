@@ -59,17 +59,17 @@ jobs:
 
      - name: Build Docker image for AWS ECR
        if: success()
-       run:  docker tag ecremotion:latest public.ecr.aws/s5l4a4t7/ecremotion:latest
+       run: docker build -t ecremotion .
        
      - name: Tag Docker image
        if: success()
        run: |
-          docker tag ecremotion:latest public.ecr.aws/s5l4a4t7/ecremotion:latest
+          docker tag ecremotion:latest public.ecr.aws/s5l4a4t7/ecremotion:v1
 
      - name: Push Docker image to AWS ECR
        if: success()
        run: |
-          docker push public.ecr.aws/s5l4a4t7/ecremotion:latest
+          docker push public.ecr.aws/s5l4a4t7/ecremotion:v1
 
          
 

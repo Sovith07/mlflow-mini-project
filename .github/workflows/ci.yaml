@@ -50,7 +50,7 @@ jobs:
           DAGSHUB_PAT: ${{ secrets.DAGSHUB_PAT }}
        run: python -m unittest tests/test_flaskapp.py
 
-     - name: Login to AWS ECR
+     - name: Login to AWS ECR  # github actions logging to ecr
        if: success()
        run: |
           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -64,12 +64,35 @@ jobs:
      - name: Tag Docker image
        if: success()
        run: |
-          docker tag ecremotion:latest public.ecr.aws/s5l4a4t7/ecremotion:v1
+          docker tag ecremotion:latest public.ecr.aws/s5l4a4t7/ecremotion:v2
 
      - name: Push Docker image to AWS ECR
        if: success()
        run: |
-          docker push public.ecr.aws/s5l4a4t7/ecremotion:v1
+          docker push public.ecr.aws/s5l4a4t7/ecremotion:v2
+
+     - name: Deploy to EC2 from ECR 
+       if: success()
+       uses: appleboy/ssh-action@v0.1.5
+       with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |   # ec2 logging in ecr
+         aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}   
+         aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+         aws configure set default.region eu-north-1
+         aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
+         docker pull public.ecr.aws/s5l4a4t7/ecremotion:latest 
+         docker stop emotion-app || true
+         docker rm emotion-app || true
+         docker run -p 80:5000 --name emotion-app -e DAGSHUB_PAT=${{ secrets.DAGSHUB_PAT }} public.ecr.aws/s5l4a4t7/ecremotion:v2  
+
+
+
+
+
+
 
          
 

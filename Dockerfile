@@ -18,7 +18,11 @@ CMD ["python", "app.py"]
 # docker build -t sovith07/emotion1:v1 .
 # docker run -p 8888:5000 -e DAGSHUB_PAT=personal-token sovith07/emotion1:v1  for local
 
-#to run container in aws ec2 execute this(without ci/cd)
+
+
+
+
+#to run container in aws ec2 execute this
 
 # Update the system
 #sudo apt-get update 
@@ -28,21 +32,23 @@ CMD ["python", "app.py"]
 
 # Start and enable Docker
 #sudo systemctl start docker
-#sudo systemctl enable docker
+#sudo systemctl enable docker   
 
+# these commands should also be run in ec2 before when you are using ci/cd
+
+#without ci/cd pull and deployment
 # Pull the latest image
-#docker pull sovith07/emotion1:v2
+#sudo docker pull sovith07/emotion1:v1
 
 # Run the container
-#docker run -p 80:5000 -e DAGSHUB_PAT=personal-token sovith07/emotion1:v1    
+#sudo docker run -p 80:5000 -e DAGSHUB_PAT=personal-token sovith07/emotion1:v1 
 
 
 
-#while integrating ec2 depolyment with github actions we run a command in ec2 
-#sudo usermod -aG docker ubuntu  
-#which help us to execute command in ec2 without writing sudo
+#sudo usermod -aG docker ubuntu        which help us to execute command in ec2 without writing sudo
 
 # while deploying on ec2 always set port mapping to 80 beacuse http request is allowed on 80 only
+# also while delpoying on ec2 with ci/cd we have to provide key-pair value to github secret and variables and also the host link
 
 
 
@@ -68,7 +74,7 @@ CMD ["python", "app.py"]
 
 
 
-# to connect ecr with e2  (without ci/cd)
+# to connect ecr with e2 
 # Update packages
 #sudo apt-get update
 
@@ -94,8 +100,10 @@ CMD ["python", "app.py"]
 
 # exit 
 
+# these commands should also be run in ec2 before when you are using ci/cd
+
 # Configure AWS CLI
-#aws configure
+#aws configure  for connecting ecr with ec2
 
 # Login to Amazon ECR (Public)
 #aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
@@ -104,4 +112,4 @@ CMD ["python", "app.py"]
 #docker pull public.ecr.aws/s5l4a4t7/ecremotion:latest 
 
 # Run the container
-#docker run -p 8888:5000 --name emotion-app -e DAGSHUB_PAT=personal-token public.ecr.aws/s5l4a4t7/ecremotion:latest   
+#docker run -p 80:5000 --name emotion-app -e DAGSHUB_PAT=personal-token public.ecr.aws/s5l4a4t7/ecremotion:latest   

@@ -83,10 +83,10 @@ jobs:
          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
          aws configure set default.region eu-north-1
          aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
-         docker pull public.ecr.aws/s5l4a4t7/ecremotion:latest 
+         docker pull public.ecr.aws/s5l4a4t7/ecremotion:v2
          docker stop emotion-app || true
          docker rm emotion-app || true
-         docker run -p 80:5000 --name emotion-app -e DAGSHUB_PAT=${{ secrets.DAGSHUB_PAT }} public.ecr.aws/s5l4a4t7/ecremotion:v2  
+         docker run -d -p 80:5000 --name emotion-app -e DAGSHUB_PAT=${{ secrets.DAGSHUB_PAT }} public.ecr.aws/s5l4a4t7/ecremotion:v2  
 
 
 

@@ -50,35 +50,60 @@ jobs:
           DAGSHUB_PAT: ${{ secrets.DAGSHUB_PAT }}
        run: python -m unittest tests/test_flaskapp.py
 
-     -  name: Build Docker image
-        if: success()
-        run: |
-          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/emotion1:v3 .  
-
-     - name: Login to Docker Hub
-       uses: docker/login-action@v3
-       with:
-        username: ${{ secrets.DOCKER_HUB_USERNAME }}
-        password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-
-     - name: Push Docker Image
-       run: |
-         docker push ${{ secrets.DOCKER_HUB_USERNAME }}/emotion1:v3
-
-     - name: Deploy to EC2
+     - name: Login to AWS ECR
        if: success()
-       uses: appleboy/ssh-action@v0.1.5
-       with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USER }}
-        key: ${{ secrets.EC2_SSH_KEY }}
-        script: |
-         docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/emotion1:v3
+       run: |
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
 
-         docker stop emotion-app || true
-         docker rm emotion-app || true
+     - name: Build Docker image for AWS ECR
+       if: success()
+       run:  docker tag ecremotion:latest public.ecr.aws/s5l4a4t7/ecremotion:latest
+       
+     - name: Tag Docker image
+       if: success()
+       run: |
+          docker tag ecremotion:latest public.ecr.aws/s5l4a4t7/ecremotion:latest
 
-         docker run -d --name emotion-app \
-         -p 80:5000 \
-         -e DAGSHUB_PAT=${{ secrets.DAGSHUB_PAT }} \
-         ${{ secrets.DOCKER_HUB_USERNAME }}/emotion1:v3
+     - name: Push Docker image to AWS ECR
+       if: success()
+       run: |
+          docker push public.ecr.aws/s5l4a4t7/ecremotion:latest
+
+         
+
+#     -  name: Build Docker image for docker hub 
+#        if: success()
+#        run: |
+#          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/emotion1:v3 .  
+
+#     - name: Login to Docker Hub
+#       uses: docker/login-action@v3
+#       with:
+#        username: ${{ secrets.DOCKER_HUB_USERNAME }}
+#        password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+#
+#     - name: Push Docker Image
+#       run: |
+#         docker push ${{ secrets.DOCKER_HUB_USERNAME }}/emotion1:v3
+
+#     - name: Deploy to EC2 from docker hub
+#       if: success()
+#       uses: appleboy/ssh-action@v0.1.5
+#       with:
+#        host: ${{ secrets.EC2_HOST }}
+#        username: ${{ secrets.EC2_USER }}
+#        key: ${{ secrets.EC2_SSH_KEY }}
+#        script: |
+#         docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/emotion1:v3
+#
+#         docker stop emotion-app || true
+#         docker rm emotion-app || true
+#
+#         docker run -d --name emotion-app \
+#         -p 80:5000 \
+#         -e DAGSHUB_PAT=${{ secrets.DAGSHUB_PAT }} \
+#         ${{ secrets.DOCKER_HUB_USERNAME }}/emotion1:v3
+
+      

@@ -113,3 +113,5 @@ CMD ["python", "app.py"]
 
 # Run the container
 #docker run -p 80:5000 --name emotion-app -e DAGSHUB_PAT=personal-token public.ecr.aws/s5l4a4t7/ecremotion:latest   
+
+#username is always ubuntu
